@@ -1,4 +1,4 @@
 test-metrics
 ============
 
-Test metric reporting
+Test metric reporting.
