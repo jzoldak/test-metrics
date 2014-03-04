@@ -6,12 +6,22 @@ pip install -r requirements.txt
 
 cat > unit_test_groups.json <<END
 {
-    "lms": "lms/*.py",
-    "studio": "cms/*.py",
-    "javascript": "*.js",
-    "common_lib": "common/lib/*.py",
-    "common_app": "common/djangoapps/*.py"
+    "unit.lms": "lms/*.py",
+    "unit.studio": "cms/*.py",
+    "unit.javascript": "*.js",
+    "unit.common_lib": "common/lib/*.py",
+    "unit.common_app": "common/djangoapps/*.py"
+}
+END
+
+cat > acceptance_test_groups.json <<END
+{
+    "acceptance.lms": "lms/*.py",
+    "acceptance.studio": "cms/*.py",
+    "acceptance.common_lib": "common/lib/*.py",
+    "acceptance.common_app": "common/djangoapps/*.py"
 }
 END
 
 python -m metrics.coverage unit_test_groups.json `find reports -name "coverage.xml"`
+python -m metrics.coverage acceptance_test_groups.json `find reports -name "acceptance_coverage.xml"`
