@@ -22,12 +22,12 @@ The tool uses the *union* of covered lines across each of the input
 coverage XML reports.  If a line is covered *anywhere*, it's considered covered.
 """
 
-import os
 import sys
 import fnmatch
 import json
 from lxml import etree
 from dogapi import dog_http_api
+from helpers import configure_datadog
 
 
 USAGE = u"USAGE: {prog} GROUPS_JSON COVER_XML_1 [COVER_XML_2, ...] "
@@ -146,21 +146,6 @@ class CoverageData(object):
             return None
 
 
-def configure_datadog():
-    """
-    Read API key from environment vars, exiting with an error
-    if they are not set.
-    """
-    api_key = os.environ.get('DATADOG_API_KEY')
-
-    if api_key is None:
-        print u"Must specify DataDog API key with env var DATADOG_API_KEY"
-        sys.exit(1)
-
-    else:
-        dog_http_api.api_key = api_key
-
-
 def load_group_defs(group_json_path):
     """
     Load the dictionary mapping group names to source file patterns
@@ -235,7 +220,7 @@ def main():
     group_dict = load_group_defs(group_json_path)
 
     print "Configuring DataDog..."
-    configure_datadog()
+    dog_http_api.api_key = configure_datadog()
 
     print "Parsing reports..."
     metrics = parse_reports(report_paths)
